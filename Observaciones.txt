@@ -1,0 +1,20 @@
+¡Muy buena práctica, Miguel! Te dejamos algo de feedback:
+
+· En el preprocesamiento, tokenizas con padding. En realidad el padding lo queremos al juntar los ejemplos en el batch de entrenamiento en el collator, 
+no en el preprocesado. Esto hace que las frases en tu dataset guarden el padding, que no es necesario. Hay un DataCollatorWithPadding que es el que debería 
+añadirlo dinámicamente.
+
+· Podrías usar validación para seleccionar el modelo que mejor generaliza, y después evaluar en el conjunto de test separado para no sobreestimar su rendimiento.
+
+· Al principio implementas una función para congelar capas de un modelo, pero después no la usas. En esa función sí congelabas la capa de embeddings, 
+pero en el resto del código no. No es necesariamente incorrecto congelar las primeras capas pero no los embeddings, pero debes tener en cuenta que en ese
+
+caso deberás propagar los gradientes por toda la red, haciendo menos eficiente el proceso de entrenamiento.
+
+· En los modelos con redes siamesas, realmente estás tokenizando los dos textos juntos. Date cuenta que input_ids1 es exactamente igual que input_ids2, 
+no van ambas frases por separado, van las dos juntas en ambos campos. Esas propuestas por lo tanto son más o menos equivalentes a la primera.
+
+· En la primera propuesta, usas un modelo fine-tuneado para obtener embeddings de un solo texto, pero para obtener features de parejas de texto. Usar un modelo 
+generalista sin fine-tunear (e.g. bert-base-uncased) habría sido un poco más apropiado con este approach. Estos modelos que usas normalmente sacan un embedding de 
+cada texto por separado, y luego comparan los embeddings. Igualmente, seguramente conserve buena parte del pre-entrenamiento, así que también funciona bien.
+

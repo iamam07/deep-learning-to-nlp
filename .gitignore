@@ -172,3 +172,7 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+#evito subir los archivos de entrenamiento a github
+# ya que son muy pesados y no es necesario
+/checkpoints

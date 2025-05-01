@@ -8,3 +8,5 @@ datasets
 transformers
 ipywidgets
 IPython
+hf_xet
+ipykernel
