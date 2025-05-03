@@ -10,3 +10,4 @@ ipywidgets
 IPython
 hf_xet
 ipykernel
+sentence-transformers
